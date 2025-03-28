@@ -1,6 +1,6 @@
 import unittest
 
-from htmlnode import HTMLNode, LeafNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 test_list = [1, 2, 3]
 test_dict = {"href": "https://www.google.com"}
@@ -44,6 +44,33 @@ class TestHTMLNode(unittest.TestCase):
     def test_leaf_to_html_no_tag(self):
         node = LeafNode(None, "Hello, world!")
         self.assertEqual(node.to_html(), "Hello, world!")
+
+    #ParentNode tests
+
+    def test_parent_to_html(self):
+        child1 = LeafNode("p", "Hello, world!")
+        child2 = LeafNode("a", "Click me!", {"href": "https://www.google.com"})
+        parent = ParentNode("div", [child1, child2])
+        self.assertEqual(
+            parent.to_html(),
+            '<div><p>Hello, world!</p><a href="https://www.google.com">Click me!</a></div>',
+        )
+    def test_parent_to_html_no_tag(self):
+        child1 = LeafNode("p", "Hello, world!")
+        child2 = LeafNode("a", "Click me!", {"href": "https://www.google.com"})
+        parent = ParentNode(None, [child1, child2])
+        with self.assertRaises(ValueError):
+            parent.to_html()
+
+    def test_parent_to_html_no_children(self):
+        parent = ParentNode("div", None)
+        with self.assertRaises(ValueError):
+            parent.to_html()
+
+    def test_parent_to_html_no_tag_no_children(self):
+        parent = ParentNode(None, None)
+        with self.assertRaises(ValueError):
+            parent.to_html()
 
 if __name__ == "__main__":
     unittest.main()
