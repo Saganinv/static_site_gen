@@ -8,6 +8,7 @@ from extractions import (
     text_to_textnodes
 )
 from textnode import TextNode, TextType
+from markdown_blocks import markdown_to_blocks
 
 
 class TestInlineMarkdown(unittest.TestCase):
